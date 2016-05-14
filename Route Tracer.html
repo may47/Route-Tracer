@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html>
+  <head>
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
+  </head>
+  
+  <body>
+ <div id="head"> Route Tracer</div>  
+      
+    <div id="mapX">
+    </div>
+  </body>
+  
+  
+  
+</html>
+
+
+<style>
+  
+  html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    background-color:whitesmoke;
+    align-items:center;
+    justify-content:center;
+    }
+  
+    #head{
+        width:70%;
+        height: 20%;
+        margin-top:3%;
+        color: #3399FF;
+        position: absolute;
+        font-size: 8em;
+        font-family: monospace;
+        text-align: center;
+    }    
+    
+  #mapX{
+  height:60%;
+  width:70%;
+  border:2px solid #3399FF;
+  }
+    
+    
+</style>
+
+<script>
+    var map;
+    var point;
+    
+    var mapper={
+        center:new google.maps.LatLng(30.544521,76.238422),
+        zoom:13,
+        mapTypeId:google.maps.MapTypeId.ROADMAP
+        };
+     
+    function initMap()
+    {
+        
+        
+     map = new google.maps.Map(document.getElementById("mapX"),mapper);
+     
+     point= new google.maps.Polyline(
+    {
+        path:[],
+        map:map,
+        strokeColor:"#3399FF",
+        strokeOpacity:1,
+        strokeWeight:4
+    }
+    );    
+        
+    }
+    
+    initMap();
+
+    function route(lat,lng)
+    {return new google.maps.LatLng(lat,lng);}
+    
+    var flightRoute=[
+         route(30.544521,76.238422),
+         route(30.558586,76.236748),
+         route(30.571868,76.235675),
+         route(30.604674,76.232070),
+         route(30.607555,76.234302),
+         route(30.611692,76.2333358),
+         route(30.631483,76.255600),
+         route(30.647409,76.273591),
+         route(30.663829,76.2913799),
+         route(30.678330,76.267956),
+         route(30.691551,76.245077),
+         route(30.7047224,76.2208271),
+         route(30.737447,76.145040),
+         route(30.762636,76.0834121),
+         route(30.803192,76.02315902),
+         route(30.832301,75.978989)
+        ];
+
+    
+        
+    var i=0;
+    var x=[];
+    var n= flightRoute.length;
+    
+    var id= setInterval(play,1000);
+    
+    function placeMarker(location,i) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map,
+  });
+  var infowindow = new google.maps.InfoWindow({
+    content:'Time: '+ (i+1).toString()+ ' --- Lat: ' + location.lat().toPrecision(6) +' --- Lng: ' + location.lng().toPrecision(6)
+  });
+  infowindow.open(map,marker);
+}
+    
+    function play()
+    {
+        if(i==n){
+            x=[];
+            i=0;
+            initMap();
+        }
+        
+        else{x.push(flightRoute[i]);
+             point.setPath(x);
+             placeMarker(flightRoute[i],i);           
+             map.panTo(flightRoute[i]);
+             i++;
+             }
+        
+        
+    }
+    
+    
+   
+ 
+    
+    
+</script>
